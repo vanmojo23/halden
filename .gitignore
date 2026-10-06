@@ -1,0 +1,12 @@
+node_modules
+.grok
+.tanstack
+.vercel
+screenshots
+artifacts
+__pycache__/
+*.pyc
+dist
+.output
+.env
+.env.*
