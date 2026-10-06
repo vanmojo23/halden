@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --color-bg: #0e0f12;
+  --color-elevated: #16181d;
+  --color-subtle: #1e2128;
+  --color-fg: #f2f3f5;
+  --color-muted: #9aa0ab;
+  --color-faint: #848b98;
+  --color-line: #2a2e37;
+  --color-accent: #e7e9ee;
+  --color-accent-fg: #0e0f12;
+  --color-approve: #8eae96;
+  --color-escalate: #d0b48a;
+  --color-reject: #e0a19a;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --text-display: clamp(1.75rem, 1.3rem + 1.6vw, 2.25rem);
+  --text-display--line-height: 1.15;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .press {
+    transition:
+      transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 150ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 150ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .press:active {
+    transform: scale(0.98);
+  }
+
+  .field-shell {
+    transition:
+      background-color 150ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 150ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press,
+  .field-shell {
+    transition: none;
+  }
+
+  .press:active {
+    transform: none;
+  }
+}
