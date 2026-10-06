@@ -67,7 +67,7 @@ export function compareToBaseline(current, baseline) {
       reasons.push(`${name}: HTTP status changed ${base.status} -> ${cur.status}`);
     }
     if (base.title !== undefined && cur.title !== undefined && cur.title !== base.title) {
-      reasons.push(`${name}: title changed (\"${base.title}\" -> \"${cur.title}\")`);
+      reasons.push(`${name}: title changed ("${base.title}" -> "${cur.title}")`);
     }
     if (base.hasCanvas && !cur.hasCanvas) {
       reasons.push(`${name}: canvas disappeared`);
