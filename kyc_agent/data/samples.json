@@ -1,0 +1,268 @@
+[
+  {
+    "id": "elena",
+    "blurb": "Payroll and card spend, passport matches",
+    "application": {
+      "name": "Elena Voss",
+      "date_of_birth": "1988-02-14",
+      "address": "14 Kastanienallee, 10435 Berlin, Germany",
+      "id_document": {
+        "document_type": "passport",
+        "document_number": "C4X19K2271",
+        "issuing_country": "DE",
+        "expiry_date": "2032-04-01",
+        "name_on_document": "Elena Voss"
+      },
+      "transactions": [
+        {
+          "id": "ev-1",
+          "date": "2026-09-03",
+          "amount": 64.1,
+          "currency": "EUR",
+          "direction": "debit",
+          "counterparty": "REWE Markt",
+          "country": "DE",
+          "channel": "card",
+          "description": "Groceries"
+        },
+        {
+          "id": "ev-2",
+          "date": "2026-09-04",
+          "amount": 42,
+          "currency": "EUR",
+          "direction": "debit",
+          "counterparty": "BVG",
+          "country": "DE",
+          "channel": "card",
+          "description": "Transit"
+        },
+        {
+          "id": "ev-3",
+          "date": "2026-09-15",
+          "amount": 3200,
+          "currency": "EUR",
+          "direction": "credit",
+          "counterparty": "Nordlicht GmbH",
+          "country": "DE",
+          "channel": "wire",
+          "description": "Payroll"
+        }
+      ]
+    }
+  },
+  {
+    "id": "viktor",
+    "blurb": "Name and date of birth on a sanctions list",
+    "application": {
+      "name": "Viktor Petrov",
+      "date_of_birth": "1978-03-12",
+      "address": "12 Bolshaya Nikitskaya, Moscow, Russia",
+      "id_document": {
+        "document_type": "passport",
+        "document_number": "P8821044",
+        "issuing_country": "RU",
+        "expiry_date": "2030-11-20",
+        "name_on_document": "Viktor Petrov"
+      },
+      "transactions": [
+        {
+          "id": "vp-1",
+          "date": "2026-07-28",
+          "amount": 120000,
+          "currency": "USD",
+          "direction": "debit",
+          "counterparty": "Voskhod Procurement",
+          "country": "RU",
+          "channel": "wire",
+          "description": "Invoice 441"
+        },
+        {
+          "id": "vp-2",
+          "date": "2026-08-02",
+          "amount": 640,
+          "currency": "USD",
+          "direction": "debit",
+          "counterparty": "Cafe Pushkin",
+          "country": "RU",
+          "channel": "card",
+          "description": "Dining"
+        }
+      ]
+    }
+  },
+  {
+    "id": "amara",
+    "blurb": "Adverse media on wire fraud",
+    "application": {
+      "name": "Amara Okonkwo",
+      "date_of_birth": "1984-06-30",
+      "address": "48 Columbia Road, London E2 7RG, United Kingdom",
+      "id_document": {
+        "document_type": "passport",
+        "document_number": "GB5521908",
+        "issuing_country": "GB",
+        "expiry_date": "2031-06-30",
+        "name_on_document": "Amara Okonkwo"
+      },
+      "transactions": [
+        {
+          "id": "ao-1",
+          "date": "2026-08-12",
+          "amount": 24000,
+          "currency": "GBP",
+          "direction": "debit",
+          "counterparty": "North Quay Consulting",
+          "country": "GB",
+          "channel": "wire",
+          "description": "Consulting invoice"
+        },
+        {
+          "id": "ao-2",
+          "date": "2026-08-19",
+          "amount": 18500,
+          "currency": "GBP",
+          "direction": "debit",
+          "counterparty": "Harbor Ledger Ltd",
+          "country": "GB",
+          "channel": "wire",
+          "description": "Settlement"
+        },
+        {
+          "id": "ao-3",
+          "date": "2026-09-01",
+          "amount": 76,
+          "currency": "GBP",
+          "direction": "debit",
+          "counterparty": "Tesco",
+          "country": "GB",
+          "channel": "card",
+          "description": "Groceries"
+        }
+      ]
+    }
+  },
+  {
+    "id": "maria",
+    "blurb": "Alias hit, date of birth does not agree",
+    "application": {
+      "name": "Maria Chen",
+      "date_of_birth": "1991-08-03",
+      "address": "880 Harrison Street, San Francisco, CA 94107, United States",
+      "id_document": {
+        "document_type": "driver_license",
+        "document_number": "D3328917",
+        "issuing_country": "US",
+        "expiry_date": "2029-08-03",
+        "name_on_document": "Maria Chen"
+      },
+      "transactions": [
+        {
+          "id": "mc-1",
+          "date": "2026-09-01",
+          "amount": 6100,
+          "currency": "USD",
+          "direction": "credit",
+          "counterparty": "City of Hope",
+          "country": "US",
+          "channel": "wire",
+          "description": "Payroll"
+        },
+        {
+          "id": "mc-2",
+          "date": "2026-09-05",
+          "amount": 112,
+          "currency": "USD",
+          "direction": "debit",
+          "counterparty": "Trader Joe's",
+          "country": "US",
+          "channel": "card",
+          "description": "Groceries"
+        },
+        {
+          "id": "mc-3",
+          "date": "2026-09-12",
+          "amount": 48,
+          "currency": "USD",
+          "direction": "debit",
+          "counterparty": "Clipper",
+          "country": "US",
+          "channel": "card",
+          "description": "Transit"
+        }
+      ]
+    }
+  },
+  {
+    "id": "samuel",
+    "blurb": "Cash just under 10,000 and a bad passport",
+    "application": {
+      "name": "Samuel Drake",
+      "date_of_birth": "1975-11-09",
+      "address": "410 Elm Street, Dallas, TX 75201, United States",
+      "id_document": {
+        "document_type": "passport",
+        "document_number": "US4402188",
+        "issuing_country": "US",
+        "expiry_date": "2026-01-15",
+        "name_on_document": "Samual Drake"
+      },
+      "transactions": [
+        {
+          "id": "sd-1",
+          "date": "2026-09-02",
+          "amount": 9600,
+          "currency": "USD",
+          "direction": "credit",
+          "counterparty": "Dallas Main Branch",
+          "country": "US",
+          "channel": "cash",
+          "description": "Cash deposit"
+        },
+        {
+          "id": "sd-2",
+          "date": "2026-09-04",
+          "amount": 9800,
+          "currency": "USD",
+          "direction": "credit",
+          "counterparty": "Dallas Main Branch",
+          "country": "US",
+          "channel": "cash",
+          "description": "Cash deposit"
+        },
+        {
+          "id": "sd-3",
+          "date": "2026-09-08",
+          "amount": 9500,
+          "currency": "USD",
+          "direction": "credit",
+          "counterparty": "Dallas Main Branch",
+          "country": "US",
+          "channel": "cash",
+          "description": "Cash deposit"
+        },
+        {
+          "id": "sd-4",
+          "date": "2026-09-11",
+          "amount": 9900,
+          "currency": "USD",
+          "direction": "credit",
+          "counterparty": "Dallas Main Branch",
+          "country": "US",
+          "channel": "cash",
+          "description": "Cash deposit"
+        },
+        {
+          "id": "sd-5",
+          "date": "2026-09-14",
+          "amount": 220,
+          "currency": "USD",
+          "direction": "debit",
+          "counterparty": "Shell",
+          "country": "US",
+          "channel": "card",
+          "description": "Fuel"
+        }
+      ]
+    }
+  }
+]

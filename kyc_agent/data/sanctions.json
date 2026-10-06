@@ -1,0 +1,38 @@
+[
+  {
+    "list_id": "SDN-104482",
+    "name": "Viktor Petrov",
+    "aliases": ["Viktor Aleksandrovich Petrov", "V. A. Petrov"],
+    "date_of_birth": "1978-03-12",
+    "address": "Moscow, Russia",
+    "program": "OFAC SDN",
+    "remarks": "Designated for acting on behalf of a sanctioned defense contractor."
+  },
+  {
+    "list_id": "SDN-228811",
+    "name": "Chen Wei",
+    "aliases": ["Maria Chen", "Wei Chen"],
+    "date_of_birth": "1962-04-19",
+    "address": "Shanghai, China",
+    "program": "OFAC SDN",
+    "remarks": "Alias Maria Chen added in 2014. Persons who only share the alias are not designated."
+  },
+  {
+    "list_id": "UN-00912",
+    "name": "Hassan Al-Rahim",
+    "aliases": ["Hassan Rahim"],
+    "date_of_birth": "1971-01-30",
+    "address": "Damascus, Syria",
+    "program": "UN 1267",
+    "remarks": "Listed for financing designated groups."
+  },
+  {
+    "list_id": "EU-44109",
+    "name": "Olga Sidorova",
+    "aliases": ["Olga V. Sidorova"],
+    "date_of_birth": "1980-12-05",
+    "address": "Minsk, Belarus",
+    "program": "EU restrictive measures",
+    "remarks": "Listed for providing material support to a designated entity."
+  }
+]
