@@ -1,0 +1,62 @@
+[
+  {
+    "id": "AM-20411",
+    "subject": "Amara Okonkwo",
+    "aliases": [],
+    "date_of_birth": "1984-06-30",
+    "headline": "London trader charged in $2.4m wire-fraud indictment",
+    "source": "Financial Times",
+    "published": "2024-11-18",
+    "severity": "high",
+    "category": "fraud",
+    "summary": "Southwark Crown Court unsealed an indictment alleging Okonkwo directed false invoices through two consulting firms."
+  },
+  {
+    "id": "AM-20488",
+    "subject": "Amara Okonkwo",
+    "aliases": [],
+    "date_of_birth": "1984-06-30",
+    "headline": "FCA freezes accounts linked to an Okonkwo transfer chain",
+    "source": "Reuters",
+    "published": "2025-02-02",
+    "severity": "high",
+    "category": "money_laundering",
+    "summary": "The regulator froze six accounts after rapid pass-through transfers."
+  },
+  {
+    "id": "AM-19002",
+    "subject": "Viktor Petrov",
+    "aliases": ["Viktor Aleksandrovich Petrov"],
+    "date_of_birth": "1978-03-12",
+    "headline": "Leaked invoices tie Petrov to a barred procurement network",
+    "source": "OCCRP",
+    "published": "2023-06-11",
+    "severity": "high",
+    "category": "sanctions_evasion",
+    "summary": "Correspondence shows invoices routed to a designated defense contractor."
+  },
+  {
+    "id": "AM-15580",
+    "subject": "Maria Chen",
+    "aliases": [],
+    "date_of_birth": "1962-04-19",
+    "headline": "Shanghai executive named in an export-diversion inquiry",
+    "source": "South China Morning Post",
+    "published": "2016-08-01",
+    "severity": "medium",
+    "category": "export_control",
+    "summary": "Investigators named a Maria Chen, born 1962, in a diversion inquiry. No charging document is on file."
+  },
+  {
+    "id": "AM-22100",
+    "subject": "James Holt",
+    "aliases": [],
+    "date_of_birth": "1970-05-05",
+    "headline": "Holt pleads guilty to structuring cash deposits",
+    "source": "Department of Justice",
+    "published": "2022-03-14",
+    "severity": "high",
+    "category": "structuring",
+    "summary": "Unrelated defendant, included so other names can return no hit."
+  }
+]
