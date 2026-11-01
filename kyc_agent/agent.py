@@ -19,7 +19,7 @@ SYSTEM_PROMPT = (
     "sanctions match whose date of birth agrees. Do not carry context from any other case."
 )
 
-DEFAULT_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gemini-3.8-flash"
 MAX_TURNS = 8
 
 TOOLS = [
