@@ -1,4 +1,4 @@
-"""Stateless KYC reviewer. Each call starts a new Claude conversation."""
+"""Stateless KYC reviewer. Each call starts a new Gemini conversation."""
 
 from __future__ import annotations
 
@@ -19,14 +19,14 @@ SYSTEM_PROMPT = (
     "sanctions match whose date of birth agrees. Do not carry context from any other case."
 )
 
-DEFAULT_MODEL = "claude-sonnet-5-5"
+DEFAULT_MODEL = "gemini-2.5-flash"
 MAX_TURNS = 8
 
 TOOLS = [
     {
         "name": "sanctions_lookup",
         "description": "Search the sanctions list for a person by name, date of birth, and address.",
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
@@ -39,7 +39,7 @@ TOOLS = [
     {
         "name": "adverse_media_lookup",
         "description": "Search the adverse-media database for a person by name and date of birth.",
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
@@ -51,7 +51,7 @@ TOOLS = [
     {
         "name": "submit_review",
         "description": "Submit the final disposition after both lookups have been called.",
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "risk_score": {"type": "integer", "minimum": 1, "maximum": 10},
@@ -90,22 +90,6 @@ TOOLS = [
 ]
 
 
-def _block_to_dict(block: Any) -> dict:
-    if isinstance(block, dict):
-        return block
-    kind = getattr(block, "type", None)
-    if kind == "tool_use":
-        return {
-            "type": "tool_use",
-            "id": block.id,
-            "name": block.name,
-            "input": block.input,
-        }
-    if kind == "text":
-        return {"type": "text", "text": block.text}
-    raise TypeError(f"Unsupported content block {kind}")
-
-
 def _extract_json(text: str) -> dict:
     cleaned = text.strip()
     if cleaned.startswith("```"):
@@ -120,111 +104,130 @@ def _extract_json(text: str) -> dict:
 
 def _client_default():
     try:
-        import anthropic
+        from google import genai
     except ImportError as exc:
         raise RuntimeError(
-            "The Anthropic SDK is not installed. Install anthropic and set ANTHROPIC_API_KEY."
+            "The Google Gen AI SDK is not installed. Install google-genai and set GEMINI_API_KEY."
         ) from exc
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        raise RuntimeError("ANTHROPIC_API_KEY is not set.")
-    return anthropic.Anthropic()
+    if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
+        raise RuntimeError("GEMINI_API_KEY or GOOGLE_API_KEY is not set.")
+    return genai.Client()
 
 
-def review_with_claude(
+def review_with_gemini(
     application: dict,
     *,
     client: Any = None,
     model: str | None = None,
 ) -> dict:
-    """Run one fresh tool-use loop. No messages are kept between calls."""
-    anthropic_client = client or _client_default()
+    """Run one fresh tool-use loop with Gemini. No messages are kept between calls."""
+    from google.genai import types
+
+    gemini_client = client or _client_default()
     chosen = model or os.environ.get("KYC_MODEL") or DEFAULT_MODEL
     log = ToolLog()
-    messages: list[dict] = [
-        {
-            "role": "user",
-            "content": "Application:\n" + json.dumps(application, indent=2, default=str),
-        }
+
+    tool = types.Tool(function_declarations=TOOLS)
+    config = types.GenerateContentConfig(
+        system_instruction=SYSTEM_PROMPT,
+        tools=[tool],
+        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+    )
+
+    contents: list[types.Content] = [
+        types.Content(
+            role="user",
+            parts=[types.Part.from_text(text="Application:\n" + json.dumps(application, indent=2, default=str))],
+        )
     ]
 
     for _ in range(MAX_TURNS):
-        response = anthropic_client.messages.create(
+        response = gemini_client.models.generate_content(
             model=chosen,
-            max_tokens=4096,
-            system=SYSTEM_PROMPT,
-            tools=TOOLS,
-            messages=messages,
+            contents=contents,
+            config=config,
         )
-        content = list(response.content)
-        tool_uses = [block for block in content if getattr(block, "type", None) == "tool_use"]
-        if tool_uses:
-            messages.append({"role": "assistant", "content": [_block_to_dict(block) for block in content]})
-            results = []
+
+        function_calls = getattr(response, "function_calls", None) or []
+        if function_calls:
+            # Append the model's response (which contains the function calls)
+            if response.candidates and response.candidates[0].content:
+                contents.append(response.candidates[0].content)
+
             submitted = None
-            for block in tool_uses:
-                if block.name == "submit_review":
+            response_parts = []
+            for fc in function_calls:
+                name = fc.name
+                args = dict(fc.args) if fc.args else {}
+
+                if name == "submit_review":
                     if not log.called("sanctions_lookup") or not log.called("adverse_media_lookup"):
                         outputs = {
                             "error": "Call sanctions_lookup and adverse_media_lookup before submit_review."
                         }
-                        log.record("submit_review", dict(block.input), outputs)
-                        results.append(
-                            {
-                                "type": "tool_result",
-                                "tool_use_id": block.id,
-                                "content": json.dumps(outputs),
-                                "is_error": True,
-                            }
+                        log.record("submit_review", args, outputs)
+                        response_parts.append(
+                            types.Part.from_function_response(
+                                name=name,
+                                response=outputs,
+                                id=getattr(fc, "id", None),
+                            )
                         )
                         continue
                     try:
-                        review = validate_review(dict(block.input))
+                        review = validate_review(args)
                     except ValueError as exc:
                         outputs = {"error": str(exc)}
-                        log.record("submit_review", dict(block.input), outputs)
-                        results.append(
-                            {
-                                "type": "tool_result",
-                                "tool_use_id": block.id,
-                                "content": json.dumps(outputs),
-                                "is_error": True,
-                            }
+                        log.record("submit_review", args, outputs)
+                        response_parts.append(
+                            types.Part.from_function_response(
+                                name=name,
+                                response=outputs,
+                                id=getattr(fc, "id", None),
+                            )
                         )
                         continue
-                    log.record("submit_review", dict(block.input), {"accepted": True})
+                    log.record("submit_review", args, {"accepted": True})
                     submitted = review
-                    results.append(
-                        {
-                            "type": "tool_result",
-                            "tool_use_id": block.id,
-                            "content": json.dumps({"accepted": True}),
-                        }
+                    response_parts.append(
+                        types.Part.from_function_response(
+                            name=name,
+                            response={"accepted": True},
+                            id=getattr(fc, "id", None),
+                        )
                     )
                 else:
-                    outputs = dispatch(block.name, dict(block.input), log)
-                    results.append(
-                        {
-                            "type": "tool_result",
-                            "tool_use_id": block.id,
-                            "content": json.dumps(outputs, default=str),
-                        }
+                    outputs = dispatch(name, args, log)
+                    response_parts.append(
+                        types.Part.from_function_response(
+                            name=name,
+                            response=outputs,
+                            id=getattr(fc, "id", None),
+                        )
                     )
+
             if submitted is not None:
-                return {**submitted, "tool_log": log.entries, "engine": "claude"}
-            messages.append({"role": "user", "content": results})
+                return {**submitted, "tool_log": log.entries, "engine": "gemini"}
+
+            if response_parts:
+                contents.append(types.Content(role="user", parts=response_parts))
             continue
 
-        text = "".join(getattr(block, "text", "") for block in content if getattr(block, "type", None) == "text")
+        # No function calls — try to parse text as a review if lookups are done
+        text = getattr(response, "text", "") or ""
         if log.called("sanctions_lookup") and log.called("adverse_media_lookup") and text.strip():
-            review = validate_review(_extract_json(text))
-            return {**review, "tool_log": log.entries, "engine": "claude"}
+            try:
+                review = validate_review(_extract_json(text))
+                return {**review, "tool_log": log.entries, "engine": "gemini"}
+            except (ValueError, json.JSONDecodeError):
+                pass
 
-        messages.append({"role": "assistant", "content": [_block_to_dict(block) for block in content] or [{"type": "text", "text": ""}]})
-        messages.append(
-            {
-                "role": "user",
-                "content": "Call sanctions_lookup and adverse_media_lookup, then submit_review.",
-            }
+        # Nudge the model
+        contents.append(
+            types.Content(
+                role="user",
+                parts=[types.Part.from_text(text="Call sanctions_lookup and adverse_media_lookup, then submit_review.")],
+            )
         )
 
     raise RuntimeError("Review stopped before a disposition was submitted.")
@@ -233,15 +236,14 @@ def review_with_claude(
 def review(application: dict, *, engine: str = "auto", client: Any = None, model: str | None = None) -> dict:
     """Review one application from scratch.
 
-    engine auto uses Claude when ANTHROPIC_API_KEY is set, otherwise the written rule
-    over the same two tools. A client argument forces the Claude loop so tests can
-    inject a fake SDK client.
+    engine auto uses Gemini when GEMINI_API_KEY or GOOGLE_API_KEY is set, otherwise the written rule
+    over the same two tools. A client argument forces the Gemini loop so tests can inject a fake client.
     """
-    if engine not in {"auto", "claude", "policy"}:
-        raise ValueError("engine must be auto, claude, or policy")
-    use_claude = client is not None or engine == "claude" or (
-        engine == "auto" and bool(os.environ.get("ANTHROPIC_API_KEY"))
+    if engine not in {"auto", "gemini", "policy"}:
+        raise ValueError("engine must be auto, gemini, or policy")
+    use_gemini = client is not None or engine == "gemini" or (
+        engine == "auto" and bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
     )
-    if use_claude:
-        return review_with_claude(application, client=client, model=model)
+    if use_gemini:
+        return review_with_gemini(application, client=client, model=model)
     return review_with_policy(application)
