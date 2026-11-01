@@ -30,7 +30,7 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="kyc_agent", description="Review one KYC application.")
     parser.add_argument("file", nargs="?", help="Path to an application JSON file")
     parser.add_argument("--sample", help="Named sample application")
-    parser.add_argument("--engine", default="auto", choices=["auto", "claude", "policy"])
+    parser.add_argument("--engine", default="auto", choices=["auto", "gemini", "policy"])
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, stream=sys.stderr, format="%(message)s")
