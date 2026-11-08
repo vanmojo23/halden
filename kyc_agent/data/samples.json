@@ -264,5 +264,56 @@
         }
       ]
     }
+  },
+  {
+    "id": "mick",
+    "blurb": "Pure name and date of birth sanctions match, otherwise clean",
+    "application": {
+      "name": "Mick Thompson",
+      "date_of_birth": "1985-07-22",
+      "address": "220 N Michigan Ave, Chicago, IL 60601, United States",
+      "id_document": {
+        "document_type": "passport",
+        "document_number": "US7788123",
+        "issuing_country": "US",
+        "expiry_date": "2031-07-22",
+        "name_on_document": "Mick Thompson"
+      },
+      "transactions": [
+        {
+          "id": "mt-1",
+          "date": "2026-09-05",
+          "amount": 42.50,
+          "currency": "USD",
+          "direction": "debit",
+          "counterparty": "Starbucks",
+          "country": "US",
+          "channel": "card",
+          "description": "Coffee"
+        },
+        {
+          "id": "mt-2",
+          "date": "2026-09-10",
+          "amount": 128.00,
+          "currency": "USD",
+          "direction": "debit",
+          "counterparty": "Whole Foods",
+          "country": "US",
+          "channel": "card",
+          "description": "Groceries"
+        },
+        {
+          "id": "mt-3",
+          "date": "2026-09-15",
+          "amount": 4500,
+          "currency": "USD",
+          "direction": "credit",
+          "counterparty": "Acme Corp",
+          "country": "US",
+          "channel": "wire",
+          "description": "Payroll"
+        }
+      ]
+    }
   }
 ]
