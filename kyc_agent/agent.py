@@ -170,7 +170,6 @@ def review_with_gemini(
                             types.Part.from_function_response(
                                 name=name,
                                 response=outputs,
-                                id=getattr(fc, "id", None),
                             )
                         )
                         continue
@@ -183,7 +182,6 @@ def review_with_gemini(
                             types.Part.from_function_response(
                                 name=name,
                                 response=outputs,
-                                id=getattr(fc, "id", None),
                             )
                         )
                         continue
@@ -193,7 +191,6 @@ def review_with_gemini(
                         types.Part.from_function_response(
                             name=name,
                             response={"accepted": True},
-                            id=getattr(fc, "id", None),
                         )
                     )
                 else:
@@ -202,7 +199,6 @@ def review_with_gemini(
                         types.Part.from_function_response(
                             name=name,
                             response=outputs,
-                            id=getattr(fc, "id", None),
                         )
                     )
 
