@@ -34,5 +34,14 @@
     "address": "Minsk, Belarus",
     "program": "EU restrictive measures",
     "remarks": "Listed for providing material support to a designated entity."
+  },
+  {
+    "list_id": "SDN-550001",
+    "name": "Mick Thompson",
+    "aliases": [],
+    "date_of_birth": "1985-07-22",
+    "address": "Chicago, United States",
+    "program": "OFAC SDN",
+    "remarks": "Designated for sanctions evasion."
   }
 ]
